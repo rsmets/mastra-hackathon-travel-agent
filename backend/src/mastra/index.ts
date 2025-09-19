@@ -5,6 +5,8 @@ import { weatherWorkflow } from "./workflows/weather-workflow";
 import { weatherAgent } from "./agents/weather-agent";
 import { travelAgent } from "./agents/travelAgent";
 
+const ENV = process.env.NODE_ENV || "development";
+
 export const mastra = new Mastra({
   workflows: { weatherWorkflow },
   agents: { weatherAgent, travelAgent },
@@ -16,4 +18,12 @@ export const mastra = new Mastra({
     name: "Mastra",
     level: "info",
   }),
+  server: {
+    // Disable CORS for development
+    cors: ENV === "development" ? {
+      origin: "*",
+      allowMethods: ["*"],
+      allowHeaders: ["*"],
+    } : undefined,
+  },
 });
