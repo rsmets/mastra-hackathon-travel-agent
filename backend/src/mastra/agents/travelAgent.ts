@@ -3,6 +3,7 @@ import { Agent } from "@mastra/core/agent";
 import { Memory } from "@mastra/memory";
 import { LibSQLStore, LibSQLVector } from "@mastra/libsql";
 import { weatherTool } from "../tools/weather-tool";
+import { hotelSearchTool } from "../tools/hotel-search-tool";
 
 // Initialize memory
 const memory = new Memory({
@@ -179,5 +180,6 @@ Remember: You are not just providing information, but helping users discover the
   memory,
   tools: {
     weatherTool,
+    hotelSearchTool,
   },
 });
