@@ -2,14 +2,13 @@ import { Mastra } from "@mastra/core/mastra";
 import { PinoLogger } from "@mastra/loggers";
 import { LibSQLStore } from "@mastra/libsql";
 import { weatherWorkflow } from "./workflows/weather-workflow";
-import { weatherAgent } from "./agents/weather-agent";
 import { travelAgent } from "./agents/travelAgent";
 
 const ENV = process.env.NODE_ENV || "development";
 
 export const mastra = new Mastra({
   workflows: { weatherWorkflow },
-  agents: { weatherAgent, travelAgent },
+  agents: { travelAgent },
   storage: new LibSQLStore({
     // stores telemetry, evals, ... into memory storage, if it needs to persist, change to file:../mastra.db
     url: ":memory:",
@@ -20,10 +19,13 @@ export const mastra = new Mastra({
   }),
   server: {
     // Disable CORS for development
-    cors: ENV === "development" ? {
-      origin: "*",
-      allowMethods: ["*"],
-      allowHeaders: ["*"],
-    } : undefined,
+    cors:
+      ENV === "development"
+        ? {
+            origin: "*",
+            allowMethods: ["*"],
+            allowHeaders: ["*"],
+          }
+        : undefined,
   },
 });

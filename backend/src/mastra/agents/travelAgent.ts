@@ -4,6 +4,7 @@ import { Memory } from "@mastra/memory";
 import { LibSQLStore, LibSQLVector } from "@mastra/libsql";
 import { weatherTool } from "../tools/weather-tool";
 import { hotelSearchTool } from "../tools/hotel-search-tool";
+import { flightSearchTool } from "../tools/flight-search-tool";
 
 // Initialize memory
 const memory = new Memory({
@@ -181,5 +182,6 @@ Remember: You are not just providing information, but helping users discover the
   tools: {
     weatherTool,
     hotelSearchTool,
+    flightSearchTool,
   },
 });
