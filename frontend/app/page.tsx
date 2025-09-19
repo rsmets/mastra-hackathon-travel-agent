@@ -3,7 +3,7 @@ export default function Page() {
   return (
     <main>
       <h1>Your App</h1>
-      <CopilotSidebar /> // [!code highlight]
+      <CopilotSidebar />
     </main>
   );
 }
