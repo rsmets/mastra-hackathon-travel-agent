@@ -23,6 +23,7 @@
     "@mastra/loggers": "^0.10.12",
     "@mastra/memory": "^0.15.2",
     "apify-client": "^2.17.0",
+    "exa-js": "^1.9.3",
     "honeyhive": "^1.0.42",
     "zod": "^3.25.76"
   },

@@ -3,12 +3,13 @@ import { PinoLogger } from "@mastra/loggers";
 import { LibSQLStore } from "@mastra/libsql";
 import { weatherWorkflow } from "./workflows/weather-workflow";
 import { travelAgent } from "./agents/travelAgent";
+import { webSummarizationAgent } from "./agents/webSummarizationAgent";
 
 const ENV = process.env.NODE_ENV || "development";
 
 export const mastra = new Mastra({
   workflows: { weatherWorkflow },
-  agents: { travelAgent },
+  agents: { travelAgent, webSummarizationAgent },
   storage: new LibSQLStore({
     // stores telemetry, evals, ... into memory storage, if it needs to persist, change to file:../mastra.db
     url: ":memory:",
