@@ -1,6 +1,12 @@
 import { createTool } from "@mastra/core/tools";
 import { ApifyClient } from "apify-client";
 import z from "zod";
+import {
+  enrichSession,
+  enrichSpan,
+  tracer,
+  traceFunction,
+} from "../../honeyhive";
 
 // Initialize the ApifyClient with API token
 const client = new ApifyClient({
@@ -96,7 +102,17 @@ const FlightSearchInputSchema = z.object({
   adults: z.number().int().optional().default(1),
 });
 
-async function getFlights(input: z.infer<typeof FlightSearchInputSchema>) {
+const getFlights = traceFunction()(async function getFlights(
+  input: z.infer<typeof FlightSearchInputSchema>,
+) {
+  // Extremely verbose inline comments:
+  // We are enriching the span with the input parameters for better observability.
+  await enrichSpan({
+    metadata: {
+      ...input,
+    },
+  });
+
   // Extremely verbose inline comments:
   // We are constructing the input for the Apify actor. The actor from the
   // OpenAPI schema (`jupri~kayak-flights`) expects keys with dot notation
@@ -175,7 +191,7 @@ async function getFlights(input: z.infer<typeof FlightSearchInputSchema>) {
 
   const filtered = coerced.filter((f) => Boolean(f.url));
   return filtered as Array<z.infer<typeof FlightOutputItemSchema>>;
-}
+});
 
 export const flightSearchTool = createTool({
   id: "get-flights",
@@ -190,6 +206,11 @@ export const flightSearchTool = createTool({
     // The execute function is the entry point for the tool. It receives the
     // context with validated input, calls our `getFlights` function,
     // and returns the results in the shape defined by `outputSchema`.
+
+    // Enrich the session with the tool id.
+    await enrichSession({
+      metadata: { tool_id: "get-flights" },
+    });
     const flights = await getFlights(context);
     return {
       flights,
